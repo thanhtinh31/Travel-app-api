@@ -19,14 +19,14 @@ public class Account {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Column(name = "name_account", unique = true)
+    @Column(name = "name_account")
     private String nameAccount;
 
     @Column(name= "password")
     private String password;
 
-    @Column(name= "full_name")
-    private String fullName;
+    @Column(name= "id_facebook")
+    private String idFacebook;
 
     @Column(name= "email")
     private String email;

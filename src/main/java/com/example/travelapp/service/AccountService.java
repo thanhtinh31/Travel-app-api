@@ -17,28 +17,36 @@ public class AccountService{
     public List<Account> listAcount(){
         return accountRepository.getAll();
     }
-    public Map<String,Object> checkLogin(String name_account, String password){
+    public Map<String,Object> checkLogin(String email, String password){
         Map<String,Object> m=new HashMap<>();
-        if(accountRepository.getAccountByName(name_account)==null)
-        {   m.put("status","0");
-            m.put("message","Tài khoản không tồn tại");
-        }
-        else
-        if(accountRepository.getStatus(name_account)==false) {
-            m.put("status","0");
-            m.put("message","Tài khoản đã bị khóa");
-
-        }else
-        if(accountRepository.checkLogin(name_account,password)==null)
+        if(accountRepository.checkLogin(email,password)==null)
         {
+            m.put("message","Email hoặc mật khẩu không chính xác");
             m.put("status","0");
-            m.put("message","Mật khẩu không chính xác");
-
         }
-        else {
-            m.put("status","1");
+        else{
             m.put("message","Đăng nhập thành công");
-            m.put("account",accountRepository.getAccountByName(name_account));
+            m.put("status","1");
+            m.put("account",accountRepository.checkLogin(email,password));
+        }
+        return m;
+    }
+    public Map<String,Object> handleLoginFB(Account account){
+        Map<String,Object> m=new HashMap<>();
+        if(accountRepository.getAccountByIDFacebook(account.getIdFacebook())!=null)
+        {
+            m.put("message","Tai khoan da co");
+            Account account1 = accountRepository.getAccountByIDFacebook(account.getIdFacebook());
+            account1.setImage(account.getImage());
+            account1.setNameAccount(account.getNameAccount());
+            accountRepository.save(account1);
+            m.put("account",accountRepository.getAccountByIDFacebook(account.getIdFacebook()));
+        }
+        else{
+
+            accountRepository.save(account);
+            m.put("message","Tai khoan moi");
+            m.put("account",account);
         }
         return m;
     }
@@ -78,7 +86,7 @@ public class AccountService{
     public Map<String,Object> update(Long id,Account account){
         Map<String,Object> m=new HashMap<>();
         Account account1 = accountRepository.findById(id).get();
-            account1.setFullName(account.getFullName());
+            account1.setIdFacebook(account.getIdFacebook());
             account1.setPhoneNumber(account.getPhoneNumber());
             account1.setAddress(account.getAddress());
             accountRepository.save(account1);

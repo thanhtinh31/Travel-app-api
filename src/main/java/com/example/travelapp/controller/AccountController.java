@@ -31,7 +31,11 @@ public class AccountController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Account account){
 
-            return  new ResponseEntity<>(accountService.checkLogin(account.getNameAccount(),account.getPassword()), HttpStatus.OK);
+            return  new ResponseEntity<>(accountService.checkLogin(account.getEmail(),account.getPassword()), HttpStatus.OK);
+    }
+    @PostMapping("/loginFB")
+    public ResponseEntity<?> loginFB(@RequestBody Account account){
+        return  new ResponseEntity<>(accountService.handleLoginFB(account), HttpStatus.OK);
     }
 
     @PostMapping("/create")

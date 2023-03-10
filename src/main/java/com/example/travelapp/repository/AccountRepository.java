@@ -16,16 +16,18 @@ public interface AccountRepository extends JpaRepository<Account,Long> {
 
   @Query(value = "select * from account", nativeQuery = true)
   List<Account> getAll();
-  @Query(value = "select status from account where name_account = ?1", nativeQuery = true)
+  @Query(value = "select status from account where email = ?1", nativeQuery = true)
   boolean getStatus(String name);
 
-  @Query(value = "select * from account where name_account = ?1", nativeQuery = true)
+  @Query(value = "select * from account where email = ?1", nativeQuery = true)
   Account getAccountByName(String name);
   @Query(value = "select * from account where id = ?1", nativeQuery = true)
   Account getAccountByID(Long id);
+  @Query(value = "select * from account where id_facebook = ?1", nativeQuery = true)
+  Account getAccountByIDFacebook(String id);
 
-  @Query(value = "select * from account where name_account = ?1 and password = ?2", nativeQuery = true)
-  Account checkLogin(String name_account,String password);
+  @Query(value = "select * from account where email = ?1 and password = ?2", nativeQuery = true)
+  Account checkLogin(String email,String password);
   @Query(value = "select password from account where id = ?1", nativeQuery = true)
   String getPassword(Long id);
   @Query(value = "SELECT type_account, count(*) as soluong FROM account group by type_account", nativeQuery = true)
